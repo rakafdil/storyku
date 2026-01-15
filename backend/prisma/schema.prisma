@@ -43,9 +43,9 @@ model Tag {
 model StoryTag {
   storyId String
   tagId   String
-  story   Story @relation(fields: [storyId], references: [id])
+  story   Story @relation(fields: [storyId], references: [id], onDelete: Cascade)
   tag     Tag   @relation(fields: [tagId], references: [id])
-
+  
   @@id([storyId, tagId])
 }
 

@@ -32,3 +32,5 @@ coverage/
 *.temp
 
 /src/generated/prisma
+
+.vercel

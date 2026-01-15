@@ -10,16 +10,18 @@ export interface Filter {
   end?: number;
 }
 
-export interface CreateStoryChapterDTO {
+export interface UpsertStoryChapterDTO {
   title: string;
   author: string;
   synopsis: string;
   category: CATEGORY;
   coverImage: string | null;
   status: STATUS;
-  tags: Tag;
-  chapter?: {
-    title: string;
-    content: string;
-  };
+  tags: string[];
+  chapter?: [
+    {
+      title: string;
+      content: string;
+    }
+  ];
 }

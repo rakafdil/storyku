@@ -7,7 +7,6 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import { notFoundHandler } from "./middlewares/notFoundHandler.js";
 import routes from "./routes/index.js";
 
-// Load environment variables
 dotenv.config();
 
 const app: Application = express();
