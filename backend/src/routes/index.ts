@@ -1,9 +1,8 @@
 import { Router } from "express";
-import exampleRoutes from "./example.routes.js";
+import storiesRoutes from "./story.routes.js";
 
 const router = Router();
 
-// Register routes
-router.use("/examples", exampleRoutes);
+router.use("/stories", storiesRoutes);
 
 export default router;

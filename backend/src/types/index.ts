@@ -1,6 +1,5 @@
-export * from "./example.types.js";
+export * from "./story.types.js";
 
-// Common types
 export interface ApiResponse<T> {
   success: boolean;
   data?: T;

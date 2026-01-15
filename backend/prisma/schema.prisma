@@ -8,14 +8,25 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+enum CATEGORY {
+  FINANCIAL
+  TECHNOLOGY
+  HEALTH
+}
+
+enum STATUS {
+  PUBLISH
+  DRAFT
+}
+
 model Story {
   id         String   @id @default(uuid())
   title      String
   author     String
   synopsis   String   @db.Text
-  category   String   
+  category   CATEGORY
   coverImage String?  
-  status     String   
+  status     STATUS   
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
