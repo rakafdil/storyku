@@ -73,8 +73,8 @@ const StoryManagement = () => {
         if (status) params.set("status", status);
 
         const queryString = params.toString();
-        const url = `${API_BASE_URL}/stories${
-          queryString ? `?${queryString}` : ""
+        const url = `${API_BASE_URL}/stories?limit=50&${
+          queryString ? `${queryString}` : ""
         }`;
 
         const response = await axios.get(url);

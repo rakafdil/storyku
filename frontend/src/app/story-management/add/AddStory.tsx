@@ -144,18 +144,18 @@ const AddStory = () => {
     updateField("imagePreviewUrl", previewUrl);
   };
 
-  if (isLoading) {
+  if (isSaving) {
     return (
       <div className="flex h-screen items-center justify-center">
         <Loader2 className="animate-spin h-8 w-8 text-primary" />
-        <span className="ml-2">Loading story data...</span>
+        <span className="ml-2">Saving story data...</span>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen overflow-y-auto p-8">
-      <div className="grid grid-cols-2 gap-10" aria-disabled={isSaving}>
+      <div className={`grid grid-cols-2 gap-10`} aria-disabled={isSaving}>
         <div className="grid w-full items-center gap-3">
           <Label htmlFor="picture">Title</Label>
           <Input

@@ -2,6 +2,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { BookOpen, User, Hash } from "lucide-react";
 import type { TagRelation } from "../StoryManagement";
+import DOMPurify from "dompurify";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -143,9 +144,12 @@ const ViewStory = () => {
                       <span className="line-clamp-1">{chapter.title}</span>
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      <span className="line-clamp-1 max-w-lg">
-                        {chapter.content}
-                      </span>
+                      <span
+                        className="line-clamp-1 max-w-lg"
+                        dangerouslySetInnerHTML={{
+                          __html: DOMPurify.sanitize(chapter.content),
+                        }}
+                      ></span>
                     </TableCell>
                   </TableRow>
                 ))
@@ -161,7 +165,12 @@ const ViewStory = () => {
               {chapter.title}
             </CardTitle>
             <CardContent>
-              <span className="w-full">{chapter.content}</span>
+              <span
+                className="w-full"
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(chapter.content),
+                }}
+              ></span>
             </CardContent>
           </CardHeader>
         </Card>
