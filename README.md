@@ -2,7 +2,7 @@
 
 A modern web application for creating, managing, and organizing your personal stories and journals. Write, edit, and share your narrative with a beautiful, intuitive interface.
 
-**Live Demo:** [https://storyku-dun.vercel.app/dashboard](https://storyku-dun.vercel.app/dashboard)
+**Live Demo:** [https://storyku-tutel.netlify.app/story](https://storyku-tutel.netlify.app/story)
 
 ---
 
@@ -252,7 +252,7 @@ The application will be available at:
 
 ## Live Demo
 
-Check out the live application: [https://storyku-dun.vercel.app/](https://storyku-dun.vercel.app/)
+Check out the live application: [https://storyku-tutel.netlify.app/story](https://storyku-tutel.netlify.app/story)
 
 ---
 
