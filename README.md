@@ -2,7 +2,7 @@
 
 A modern web application for creating, managing, and organizing your personal stories and journals. Write, edit, and share your narrative with a beautiful, intuitive interface.
 
-**Live Demo:** [https://storyku-dun.vercel.app/](https://storyku-dun.vercel.app/)
+**Live Demo:** [https://storyku-dun.vercel.app/](https://storyku-dun.vercel.app/dashboard)
 
 ---
 
