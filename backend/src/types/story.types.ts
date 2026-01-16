@@ -1,4 +1,4 @@
-import { CATEGORY, STATUS, Tag } from "@prisma/client";
+import { CATEGORY, STATUS } from "@prisma/client";
 
 export interface Filter {
   category?: CATEGORY;
