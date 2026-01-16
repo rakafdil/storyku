@@ -1,4 +1,4 @@
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Dashboard from "./dashboard/Dashboard";
 import StoryManagement from "./story-management/StoryManagement";
 import { EmptyInputGroup } from "@/components/common/ErrorPage";
@@ -11,6 +11,7 @@ function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/story">
           <Route index element={<StoryManagement />} />
