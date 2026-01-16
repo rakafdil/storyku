@@ -11,6 +11,7 @@ const titleMap: Record<string, string> = {
   "/story/create": "Add Story",
   "/story/create/chapter": "Add Chapter",
   "/story/edit/:id": "Edit Story",
+  "/story/:id": "Detail",
 };
 
 const getTitleFromPath = (

@@ -6,6 +6,7 @@ import Layout from "@/components/common/Layout";
 import AddStory from "./story-management/add/AddStory";
 import { StoryDraftProvider } from "@/context/StoryDraftContext";
 import AddChapter from "./story-management/add/chapter/AddChapter";
+import ViewStory from "./story-management/[id]/ViewStory";
 
 function App() {
   return (
@@ -15,7 +16,6 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/story">
           <Route index element={<StoryManagement />} />
-
           <Route
             path="create"
             element={
@@ -38,6 +38,7 @@ function App() {
             <Route path=":id" element={<AddStory />} />
             <Route path="chapter" element={<AddChapter />} />
           </Route>
+          <Route path=":id" element={<ViewStory />} />
         </Route>
       </Route>
       <Route path="*" element={<EmptyInputGroup />} />

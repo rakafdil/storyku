@@ -21,7 +21,9 @@ export const useStoryDraft = () => {
     chapter: { title: string; content: string }
   ) => {
     const updatedChapters = draft.chapters.map((ch, i) =>
-      i === index ? { ...chapter, lastUpdated: new Date().toISOString() } : ch
+      i === index
+        ? { ...ch, ...chapter, lastUpdated: new Date().toISOString() }
+        : ch
     );
     updateDraft({ chapters: updatedChapters });
   };

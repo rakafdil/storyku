@@ -8,7 +8,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import ActionButton from "@/components/common/ActionButton";
 
-interface TagRelation {
+export interface TagRelation {
   storyId: string;
   tagId: string;
   tag: {
@@ -179,7 +179,16 @@ const StoryManagement = () => {
                   >
                     <td className="px-6 py-4 text-sm">{i + 1}</td>
                     <td className="px-6 py-4 font-medium">
-                      <p className="max-w-[220px] truncate">{s.title}</p>
+                      <p
+                        className="max-w-[220px] truncate hover:underline cursor-pointer"
+                        onClick={() => {
+                          navigate(`/story/${s.id}`, {
+                            state: { story: s },
+                          });
+                        }}
+                      >
+                        {s.title}
+                      </p>
                     </td>
                     <td className="px-6 py-4 text-sm">{s.author}</td>
                     <td className="px-6 py-4 text-sm">
@@ -212,6 +221,11 @@ const StoryManagement = () => {
                     </td>
                     <td className="px-6 py-4 text-right">
                       <ActionButton
+                        onView={() => {
+                          navigate(`/story/${s.id}`, {
+                            state: { story: s },
+                          });
+                        }}
                         onDelete={() => {
                           handleDelete(s.id);
                         }}

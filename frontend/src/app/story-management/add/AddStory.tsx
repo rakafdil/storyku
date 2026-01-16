@@ -35,31 +35,27 @@ const AddStory = () => {
   };
 
   useEffect(() => {
-    if (isEditMode && id) {
-      const fetchStoryData = async () => {
-        setIsLoading(true);
-        try {
-          updateDraft({
-            title: story.title,
-            writer: story.author,
-            synopsis: story.synopsis,
-            category: story.category,
-            tags: story.tags,
-            status: story.status,
-            imagePreviewUrl: story.coverImage,
-            chapters: story.chapters,
-          });
-        } catch (error) {
-          console.error("Failed to fetch story", error);
-          alert("Could not load story data.");
-        } finally {
-          setIsLoading(false);
-        }
-      };
-
-      fetchStoryData();
+    if (isEditMode && id && story && !draft.title) {
+      setIsLoading(true);
+      try {
+        updateDraft({
+          title: story.title,
+          writer: story.author,
+          synopsis: story.synopsis,
+          category: story.category?.toLowerCase() || "",
+          tags: story.tags,
+          status: story.status?.toLowerCase() || "",
+          imagePreviewUrl: story.coverImage,
+          chapters: story.chapters,
+        });
+      } catch (error) {
+        console.error("Failed to fetch story", error);
+        alert("Could not load story data.");
+      } finally {
+        setIsLoading(false);
+      }
     }
-  }, [id, isEditMode]);
+  }, [id, isEditMode, story]);
 
   const handleSaveStory = async () => {
     if (!draft.title || draft.title.trim() === "") {
@@ -97,12 +93,21 @@ const AddStory = () => {
       return;
     }
 
+    const normalizedTags = Array.isArray(draft.tags)
+      ? draft.tags
+          .map((tag) =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            typeof tag === "string" ? tag : (tag as any)?.tag?.name || ""
+          )
+          .filter(Boolean)
+      : [];
+
     const payload = {
       title: draft.title,
       writer: draft.writer,
       synopsis: draft.synopsis,
       category: draft.category,
-      tags: Array.isArray(draft.tags) ? draft.tags : [],
+      tags: normalizedTags,
       status: draft.status,
       coverImage: coverImageFile || undefined,
       chapters: draft.chapters || undefined,

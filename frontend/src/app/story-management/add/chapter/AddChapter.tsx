@@ -96,7 +96,6 @@ const AddChapter = () => {
               } else {
                 addChapter({ title: data.name, content: data.content });
               }
-              console.log(draft);
               navigate(-1);
             }}
           >

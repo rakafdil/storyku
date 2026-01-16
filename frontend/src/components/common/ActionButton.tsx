@@ -9,11 +9,12 @@ import { MoreHorizontalIcon } from "lucide-react";
 import { Button } from "../ui/button";
 
 type ActionButtonProps = {
+  onView?: () => void;
   onUpdate: () => void;
   onDelete: () => void;
 };
 
-const ActionButton = ({ onUpdate, onDelete }: ActionButtonProps) => {
+const ActionButton = ({ onUpdate, onDelete, onView }: ActionButtonProps) => {
   return (
     <DropdownMenu modal={false}>
       <DropdownMenuTrigger asChild>
@@ -24,6 +25,9 @@ const ActionButton = ({ onUpdate, onDelete }: ActionButtonProps) => {
 
       <DropdownMenuContent className="w-40" align="end">
         <DropdownMenuGroup>
+          {onView && (
+            <DropdownMenuItem onSelect={onView}>View</DropdownMenuItem>
+          )}
           <DropdownMenuItem onSelect={onUpdate}>Update</DropdownMenuItem>
           <DropdownMenuItem onSelect={onDelete}>Delete</DropdownMenuItem>
         </DropdownMenuGroup>
