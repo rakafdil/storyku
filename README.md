@@ -2,7 +2,7 @@
 
 A modern web application for creating, managing, and organizing your personal stories and journals. Write, edit, and share your narrative with a beautiful, intuitive interface.
 
-**Live Demo:** [https://storyku-tutel.netlify.app/story](https://storyku-tutel.netlify.app/story)
+**Live Demo:** [https://storyku-tutel.netlify.app/](https://storyku-tutel.netlify.app/)
 
 ---
 
@@ -105,18 +105,19 @@ storyku/
 ├── frontend/                         # React + Vite frontend
 │   ├── src/
 │   │   ├── main.tsx                  # React entry point
-│   │   ├── App.tsx                   # Root component
 │   │   ├── index.css                 # Global styles
 │   │   ├── app/
-│   │   │   ├── App.tsx
+│   │   │   ├── App.tsx               # Root component
 │   │   │   ├── dashboard/            # Dashboard page
+│   │   │   │   └── Dashboard.tsx
 │   │   │   └── story-management/     # Story management pages
 │   │   │       ├── StoryManagement.tsx
 │   │   │       ├── [id]/              # Story detail page
-│   │   │       ├── add/               # Add story page
-│   │   │       │   ├── AddStory.tsx
-│   │   │       │   └── chapter/       # Add chapter page
-│   │   │       └── edit/              # Edit story page
+│   │   │       │   └── ViewStory.tsx
+│   │   │       └── add/               # Add story page
+│   │   │           ├── AddStory.tsx
+│   │   │           └── chapter/       # Add chapter page
+│   │   │               └── AddChapter.tsx
 │   │   ├── components/
 │   │   │   ├── common/               # Common components
 │   │   │   │   ├── Layout.tsx
@@ -128,28 +129,47 @@ storyku/
 │   │   │   │   ├── FilterUI.tsx
 │   │   │   │   └── TipTapToolbar.tsx
 │   │   │   └── ui/                   # Reusable UI components
+│   │   │       ├── badge.tsx
+│   │   │       ├── breadcrumb.tsx
 │   │   │       ├── button.tsx
-│   │   │       ├── input.tsx
-│   │   │       ├── textarea.tsx
+│   │   │       ├── card.tsx
 │   │   │       ├── dropdown-menu.tsx
+│   │   │       ├── empty.tsx
+│   │   │       ├── input-group.tsx
+│   │   │       ├── input.tsx
+│   │   │       ├── kbd.tsx
+│   │   │       ├── label.tsx
+│   │   │       ├── popover.tsx
+│   │   │       ├── separator.tsx
+│   │   │       ├── sheet.tsx
 │   │   │       ├── sidebar.tsx
-│   │   │       └── ... (more UI components)
+│   │   │       ├── skeleton.tsx
+│   │   │       ├── table.tsx
+│   │   │       ├── textarea.tsx
+│   │   │       └── tooltip.tsx
 │   │   ├── hooks/                    # Custom React hooks
+│   │   │   ├── use-mobile.ts
 │   │   │   ├── useStoryDraft.ts
-│   │   │   ├── useStoryUpsert.ts
-│   │   │   └── use-mobile.ts
+│   │   │   └── useStoryUpsert.ts
 │   │   ├── context/                  # React context
 │   │   │   └── StoryDraftContext.tsx
 │   │   ├── types/                    # TypeScript types
 │   │   │   └── story.ts
-│   │   ├── lib/                      # Utilities
-│   │   │   └── utils.ts
-│   │   ├── assets/                   # Static assets
-│   │   └── public/
+│   │   └── lib/                      # Utilities
+│   │       └── utils.ts
+│   ├── public/
+│   │   └── _redirects
+│   ├── .env
+│   ├── .gitignore
+│   ├── components.json
+│   ├── eslint.config.js
+│   ├── index.html
 │   ├── package.json
+│   ├── README.md
+│   ├── tsconfig.app.json
 │   ├── tsconfig.json
-│   ├── vite.config.ts
-│   └── eslint.config.js
+│   ├── tsconfig.node.json
+│   └── vite.config.ts
 │
 └── README.md
 ```
@@ -252,10 +272,9 @@ The application will be available at:
 
 ## Live Demo
 
-Check out the live application: [https://storyku-tutel.netlify.app/story](https://storyku-tutel.netlify.app/story)
+Check out the live application: [https://storyku-tutel.netlify.app/](https://storyku-tutel.netlify.app/)
 
 ---
-
 
 ## 👨‍💻 Author
 

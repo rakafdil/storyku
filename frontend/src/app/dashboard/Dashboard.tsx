@@ -1,4 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
@@ -74,7 +75,7 @@ const Dashboard = () => {
                     alt={story.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                   <Badge
                     className="absolute top-3 right-3"
                     variant={
@@ -85,7 +86,7 @@ const Dashboard = () => {
                   </Badge>
                 </div>
 
-                <CardContent className="pt-0 space-y-4 min-h-[250px] flex flex-col">
+                <CardContent className="pt-0 space-y-4 min-h-62.5 flex flex-col">
                   <div>
                     <h3 className="font-bold text-lg line-clamp-2 group-hover:text-primary transition-colors">
                       {story.title}
@@ -97,7 +98,7 @@ const Dashboard = () => {
                     <span className="font-medium">{story.author}</span>
                   </div>
 
-                  <p className="text-sm text-muted-foreground line-clamp-2 flex-grow">
+                  <p className="text-sm text-muted-foreground line-clamp-2 grow">
                     {story.synopsis || "No synopsis available"}
                   </p>
 
