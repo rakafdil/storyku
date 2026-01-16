@@ -30,7 +30,11 @@ export class StoryService {
         createdAt: "desc",
       },
       include: {
-        tags: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
         chapters: true,
       },
     });
@@ -42,7 +46,11 @@ export class StoryService {
     return prisma.story.findUnique({
       where: { id },
       include: {
-        tags: true,
+        tags: {
+          include: {
+            tag: true,
+          },
+        },
         chapters: true,
       },
     });

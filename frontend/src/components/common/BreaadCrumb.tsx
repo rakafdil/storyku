@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { Fragment } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -22,16 +23,16 @@ export function BreadcrumbWithCustomSeparator() {
         {parentSegments.map((s, i) => {
           const route = "/" + segments.slice(0, i + 1).join("/");
           return (
-            <>
-              {i > 0 && <BreadcrumbSeparator key={i} />}
-              <BreadcrumbItem key={i}>
+            <Fragment key={`breadcrumb-${i}`}>
+              {i > 0 && <BreadcrumbSeparator />}
+              <BreadcrumbItem>
                 <BreadcrumbLink className="hover:text-blue-300" asChild>
                   <Link to={route}>
                     {String(s).charAt(0).toUpperCase() + String(s).slice(1)}
                   </Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-            </>
+            </Fragment>
           );
         })}
         {segments.length > 1 && <BreadcrumbSeparator />}

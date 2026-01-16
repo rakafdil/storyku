@@ -67,7 +67,6 @@ export class StoryController {
     res: Response,
     next: NextFunction
   ): Promise<void> => {
-    // console.log(req);
     try {
       const data = await this.storiesService.createStoryChapter(
         req.body,

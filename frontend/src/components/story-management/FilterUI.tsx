@@ -7,10 +7,13 @@ import {
 } from "@/components/ui/popover";
 import { Filter } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
 
-export function FilterUI() {
-  const [searchParams, setSearchParams] = useSearchParams();
+interface FilterUIProps {
+  searchParams: URLSearchParams;
+  setSearchParams: (params: URLSearchParams) => void;
+}
+
+export function FilterUI({ searchParams, setSearchParams }: FilterUIProps) {
   const [filter, setFilter] = useState({
     category: searchParams.get("category") || "",
     status: searchParams.get("status") || "",
