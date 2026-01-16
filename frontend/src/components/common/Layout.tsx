@@ -10,12 +10,26 @@ const titleMap: Record<string, string> = {
   "/story": "Stories",
   "/story/create": "Add Story",
   "/story/create/chapter": "Add Chapter",
+  "/story/edit/:id": "Edit Story",
+};
+
+const getTitleFromPath = (
+  pathname: string,
+  titleMap: Record<string, string>
+): string => {
+  if (titleMap[pathname]) return titleMap[pathname];
+
+  for (const [pattern, title] of Object.entries(titleMap)) {
+    const regex = new RegExp(`^${pattern.replace(/:[\w]+/g, "[^/]+")}$`);
+    if (regex.test(pathname)) return title;
+  }
+  return "";
 };
 
 export default function Layout() {
   const location = useLocation();
   const navigate = useNavigate();
-  const title = titleMap[location.pathname] || "";
+  const title = getTitleFromPath(location.pathname, titleMap);
 
   const segments = location.pathname.split("/").filter(Boolean);
   return (

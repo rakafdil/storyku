@@ -5,16 +5,61 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useStoryDraft } from "@/hooks/useStoryDraft";
 import { useStoryUpsert } from "@/hooks/useStoryUpsert";
-import { Plus } from "lucide-react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Loader2, Plus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 const AddStory = () => {
   const { draft, updateField, updateDraft } = useStoryDraft();
-  const { createStory, isLoading: isSaving } = useStoryUpsert();
+  const { createStory, updateStory, isLoading: isSaving } = useStoryUpsert();
   const navigate = useNavigate();
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
+
+  const location = useLocation();
+  const story = location.state?.story;
+
+  const { id } = useParams();
+  const isEditMode = Boolean(id);
+
+  const formatDate = (dateString: string | undefined): string => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  useEffect(() => {
+    if (isEditMode && id) {
+      const fetchStoryData = async () => {
+        setIsLoading(true);
+        try {
+          updateDraft({
+            title: story.title,
+            writer: story.author,
+            synopsis: story.synopsis,
+            category: story.category,
+            tags: story.tags,
+            status: story.status,
+            imagePreviewUrl: story.coverImage,
+            chapters: story.chapters,
+          });
+        } catch (error) {
+          console.error("Failed to fetch story", error);
+          alert("Could not load story data.");
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      fetchStoryData();
+    }
+  }, [id, isEditMode]);
 
   const handleSaveStory = async () => {
     if (!draft.title || draft.title.trim() === "") {
@@ -52,25 +97,36 @@ const AddStory = () => {
       return;
     }
 
-    try {
-      const response = await createStory({
-        title: draft.title,
-        writer: draft.writer,
-        synopsis: draft.synopsis,
-        category: draft.category,
-        tags: Array.isArray(draft.tags) ? draft.tags : [],
-        status: draft.status,
-        coverImage: coverImageFile || undefined,
-        chapters: draft.chapters || undefined,
-      });
+    const payload = {
+      title: draft.title,
+      writer: draft.writer,
+      synopsis: draft.synopsis,
+      category: draft.category,
+      tags: Array.isArray(draft.tags) ? draft.tags : [],
+      status: draft.status,
+      coverImage: coverImageFile || undefined,
+      chapters: draft.chapters || undefined,
+    };
 
-      if (response.success) {
-        alert("Story created successfully!");
+    try {
+      let response;
+
+      if (isEditMode && id) {
+        response = await updateStory(id, payload);
+      } else {
+        response = await createStory(payload);
+      }
+
+      if (response?.success) {
+        alert(`Story ${isEditMode ? "updated" : "created"} successfully!`);
         navigate("/story");
       }
     } catch (error) {
-      console.error("Error creating story:", error);
-      alert("Failed to create story");
+      console.error(
+        `Error ${isEditMode ? "updating" : "creating"} story:`,
+        error
+      );
+      alert(`Failed to ${isEditMode ? "update" : "create"} story`);
     }
   };
 
@@ -82,6 +138,15 @@ const AddStory = () => {
     const previewUrl = URL.createObjectURL(file);
     updateField("imagePreviewUrl", previewUrl);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Loader2 className="animate-spin h-8 w-8 text-primary" />
+        <span className="ml-2">Loading story data...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen overflow-y-auto p-8">
@@ -137,24 +202,32 @@ const AddStory = () => {
           <div className="flex flex-wrap gap-2 p-3 border rounded-md min-h-[44px] items-center">
             {draft.tags &&
               Array.isArray(draft.tags) &&
-              draft.tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="rounded-full px-3 py-1 text-xs bg-amber-100 text-amber-800 font-medium flex items-center gap-2"
-                >
-                  {tag}
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const newTags = draft.tags.filter((_, i) => i !== index);
-                      updateField("tags", newTags);
-                    }}
-                    className="cursor-pointer hover:text-amber-900"
+              draft.tags.map((tag, index) => {
+                const tagName =
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  typeof tag === "string" ? tag : (tag as any)?.tag?.name;
+
+                return (
+                  <span
+                    key={index}
+                    className="rounded-full px-3 py-1 text-xs bg-amber-100 text-amber-800 font-medium flex items-center gap-2"
                   >
-                    ✕
-                  </button>
-                </span>
-              ))}
+                    {tagName}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newTags = draft.tags.filter(
+                          (_, i) => i !== index
+                        );
+                        updateField("tags", newTags);
+                      }}
+                      className="cursor-pointer hover:text-amber-900"
+                    >
+                      ✕
+                    </button>
+                  </span>
+                );
+              })}
             <input
               type="text"
               placeholder="Add tags..."
@@ -202,7 +275,11 @@ const AddStory = () => {
         </div>
 
         <div className="col-span-2 flex justify-end mt-8">
-          <Link to={"/story/create/chapter"}>
+          <Link
+            to={`${
+              isEditMode ? `/story/edit/chapter` : "/story/create/chapter"
+            }`}
+          >
             <Button
               size="lg"
               className="rounded-3xl py-6 hover:scale-101 cursor-pointer"
@@ -249,7 +326,9 @@ const AddStory = () => {
                     <p className="max-w-[200px] truncate">{s.title}</p>
                   </td>
                   <td className="px-6 py-4 font-medium">
-                    <p className="max-w-[200px] truncate">{s.updatedAt}</p>
+                    <p className="max-w-[200px] truncate">
+                      {formatDate(s.lastUpdated)}
+                    </p>
                   </td>
 
                   <td className="px-6 py-4 text-right">
@@ -263,7 +342,11 @@ const AddStory = () => {
                         });
                       }}
                       onUpdate={() => {
-                        navigate(`/story/create/chapter?edit=${i}`);
+                        if (isEditMode) {
+                          navigate(`/story/edit/chapter?edit=${i}`);
+                        } else {
+                          navigate(`/story/create/chapter?edit=${i}`);
+                        }
                       }}
                     />
                   </td>

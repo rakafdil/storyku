@@ -3,10 +3,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
 import { Plus, Search } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
-import { HiDotsHorizontal } from "react-icons/hi";
+import ActionButton from "@/components/common/ActionButton";
 
 interface TagRelation {
   storyId: string;
@@ -30,6 +30,26 @@ const StoryManagement = () => {
   const [error, setError] = useState<string | null>(null);
 
   const lastFetchParamsRef = useRef<string>("");
+  const navigate = useNavigate();
+
+  const API_BASE_URL =
+    import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+
+  const handleDelete = useCallback(async (id: string) => {
+    if (loading) return;
+    try {
+      setLoading(true);
+
+      const url = `${API_BASE_URL}/stories/${id}`;
+
+      await axios.delete(url);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     const currentParams = searchParams.toString();
@@ -53,7 +73,7 @@ const StoryManagement = () => {
         if (status) params.set("status", status);
 
         const queryString = params.toString();
-        const url = `https://storyku-be.vercel.app/api/stories${
+        const url = `${API_BASE_URL}/stories${
           queryString ? `?${queryString}` : ""
         }`;
 
@@ -191,9 +211,16 @@ const StoryManagement = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <Button variant="ghost" size="sm">
-                        <HiDotsHorizontal />
-                      </Button>
+                      <ActionButton
+                        onDelete={() => {
+                          handleDelete(s.id);
+                        }}
+                        onUpdate={() => {
+                          navigate(`/story/edit/${s.id}`, {
+                            state: { story: s },
+                          });
+                        }}
+                      />
                     </td>
                   </tr>
                 ))}

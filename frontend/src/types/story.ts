@@ -9,6 +9,6 @@ export interface StoryDraft {
   chapters: {
     title: string;
     content: string;
-    updatedAt?: string;
+    lastUpdated?: string;
   }[];
 }

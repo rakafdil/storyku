@@ -26,6 +26,17 @@ function App() {
             <Route index element={<AddStory />} />
             <Route path="chapter" element={<AddChapter />} />
           </Route>
+          <Route
+            path="edit"
+            element={
+              <StoryDraftProvider>
+                <Outlet />
+              </StoryDraftProvider>
+            }
+          >
+            <Route path=":id" element={<AddStory />} />
+            <Route path="chapter" element={<AddChapter />} />
+          </Route>
         </Route>
       </Route>
       <Route path="*" element={<EmptyInputGroup />} />

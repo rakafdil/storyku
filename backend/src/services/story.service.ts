@@ -118,7 +118,7 @@ export class StoryService {
     data: UpsertStoryChapterDTO,
     file?: Express.Multer.File
   ): Promise<Story> {
-    let newCoverUrl;
+    let newCoverUrl: any;
 
     if (file) {
       const blob = await put(file.originalname, file.buffer, {
@@ -135,36 +135,54 @@ export class StoryService {
       if (blobOld?.coverImage) await del(blobOld.coverImage);
     }
 
-    const story = await prisma.story.update({
-      where: { id: storyId },
-      data: {
-        title: data.title,
-        author: data.author,
-        synopsis: data.synopsis,
-        category: data.category,
-        status: data.status,
-        coverImage: newCoverUrl,
+    const uniqueTags = [...new Set(data.tags.map((t) => t.toLowerCase()))];
 
-        tags: {
-          deleteMany: {},
-          create: data.tags.map((t) => ({
-            tag: {
-              connectOrCreate: {
-                where: { name: t.toLowerCase() },
-                create: { name: t.toLowerCase() },
+    const story = await prisma.$transaction(async (tx) => {
+      await tx.storyTag.deleteMany({
+        where: { storyId },
+      });
+
+      await tx.chapter.deleteMany({
+        where: { storyId },
+      });
+
+      return tx.story.update({
+        where: { id: storyId },
+        data: {
+          title: data.title,
+          author: data.author,
+          synopsis: data.synopsis,
+          category: data.category,
+          status: data.status,
+          coverImage: newCoverUrl,
+
+          tags: {
+            create: uniqueTags.map((t) => ({
+              tag: {
+                connectOrCreate: {
+                  where: { name: t },
+                  create: { name: t },
+                },
               },
-            },
-          })),
-        },
+            })),
+          },
 
-        chapters: {
-          deleteMany: {},
-          create: data.chapter?.map((c) => ({
-            title: c.title,
-            content: c.content,
-          })),
+          chapters: {
+            create: data.chapter?.map((c) => ({
+              title: c.title,
+              content: c.content,
+            })),
+          },
         },
-      },
+        include: {
+          tags: {
+            include: {
+              tag: true,
+            },
+          },
+          chapters: true,
+        },
+      });
     });
 
     return story;

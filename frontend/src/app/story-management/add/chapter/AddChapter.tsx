@@ -6,7 +6,7 @@ import Underline from "@tiptap/extension-underline";
 import Toolbar from "@/components/story-management/TipTapToolbar";
 import { useStoryDraft } from "@/hooks/useStoryDraft";
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const AddChapter = () => {
@@ -24,9 +24,13 @@ const AddChapter = () => {
     },
   });
 
+  const navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
   const editIndex = searchParams.get("edit");
-  const { addChapter, draft } = useStoryDraft();
+  const { addChapter, updateChapter, draft } = useStoryDraft();
+  const isEditMode = editIndex !== null;
+
   const [data, setData] = useState<{ name: string; content: string }>({
     name: "",
     content: "",
@@ -69,27 +73,35 @@ const AddChapter = () => {
         </div>
 
         <div className="col-span-2 flex justify-end mt-8 gap-3">
-          <Link to={"/story/create"}>
-            <Button
-              variant="outline"
-              size="lg"
-              className="rounded-3xl py-6 hover:scale-101 cursor-pointer border-gray-600"
-              onClick={() => setData({ name: "", content: "" })}
-            >
-              Cancel
-            </Button>
-          </Link>
-          <Link to={"/story/create"}>
-            <Button
-              size="lg"
-              className="rounded-3xl py-6 hover:scale-101 cursor-pointer"
-              onClick={() =>
-                addChapter({ title: data.name, content: data.content })
+          <Button
+            variant="outline"
+            size="lg"
+            className="rounded-3xl py-6 hover:scale-101 cursor-pointer border-gray-600"
+            onClick={() => {
+              setData({ name: "", content: "" });
+              navigate(-1);
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            size="lg"
+            className="rounded-3xl py-6 hover:scale-101 cursor-pointer"
+            onClick={() => {
+              if (isEditMode && editIndex !== null) {
+                updateChapter(parseInt(editIndex), {
+                  title: data.name,
+                  content: data.content,
+                });
+              } else {
+                addChapter({ title: data.name, content: data.content });
               }
-            >
-              Save
-            </Button>
-          </Link>
+              console.log(draft);
+              navigate(-1);
+            }}
+          >
+            Save
+          </Button>
         </div>
       </div>
     </div>
